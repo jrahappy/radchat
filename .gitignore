@@ -5,4 +5,5 @@ __pycache__
 node_modules
 npm-debug.log
 yarn-error.log
+venv
 .env

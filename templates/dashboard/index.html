@@ -1,6 +1,9 @@
 {% extends "base.html" %}
+{% load static %}
+
 
 {% block content %}
     <h1 class="text-5xl">Dashboard</h1>
     <p>Welcome to your dashboard.</p>
+    <a class="text-5xl" href="{% url 'chat:index' %}" class="btn btn-primary">Chat</a>
 {% endblock %}

@@ -1,7 +1,7 @@
 from pathlib import Path
 import mimetypes
 
-mimetypes.add_type("text/css", ".css", True)
+# mimetypes.add_type("text/css", ".css", True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-&revdacqz$v09723*_48%g7_$6#+tjoplstwnqneuh7!+xwm!t"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "3.218.114.46"]
 
@@ -25,9 +25,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "channels",
     "django_vite",
+    "widget_tweaks",
     "core",
     "dashboard",
     "chat",
+    "blog",
 ]
 
 ASGI_APPLICATION = "core.asgi.application"
@@ -122,7 +124,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DJANGO_VITE = {
     "default": {
-        "dev_mode": False,  # Set to True during development
+        "dev_mode": True,  # Set to True during development
         "manifest_path": BASE_DIR / "staticfiles" / "manifest.json",
     },
 }

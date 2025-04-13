@@ -5,17 +5,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>
+    {% block title %}
+    {% endblock %}
+    | Humanrad
+    </title>
+    
     {% vite_hmr_client %}
     {% vite_asset 'static/js/main.js' %}
-    {% vite_asset_url 'static/js/main.js' %}
-
+    <!-- {% vite_asset_url 'static/js/main.js' %} -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 </head>
 <body class="bg-gray-300">
 <div class="container mx-auto p-10">
-    {% block content %}
-
+    {% block header %}
+    {% include 'header.html' %}
     {% endblock %}
+
+    {% block messages %}
+    {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
 </div>
 </body>
 </html>

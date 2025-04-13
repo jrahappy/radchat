@@ -1,2 +1,31 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+/* Style Markdown elements */
+.markdown-content h1 {
+    @apply text-3xl font-bold mb-4 text-gray-900;
+}
+.markdown-content h2 {
+    @apply text-2xl font-semibold mb-3 text-gray-800;
+}
+.markdown-content p {
+    @apply mb-4 text-gray-700 leading-relaxed;
+}
+.markdown-content code {
+    @apply bg-gray-100 text-gray-800 px-1 py-0.5 rounded;
+}
+.markdown-content pre {
+    @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto;
+}
+.markdown-content ul {
+    @apply list-disc pl-6 mb-4;
+}
+.markdown-content a {
+    @apply text-blue-500 hover:underline;
+}
+.markdown-content table {
+    @apply table-auto w-full mb-4 border-collapse;
+}
+.markdown-content th, .markdown-content td {
+    @apply border border-gray-300 p-2;
+}

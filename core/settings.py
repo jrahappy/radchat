@@ -12,7 +12,7 @@ SECRET_KEY = "django-insecure-&revdacqz$v09723*_48%g7_$6#+tjoplstwnqneuh7!+xwm!t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "3.142.98.183"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "humanradchat.com"]
 
 
 INSTALLED_APPS = [

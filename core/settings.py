@@ -124,7 +124,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DJANGO_VITE = {
     "default": {
-        "dev_mode": True,  # Set to True during development
+        "dev_mode": False,  # Set to True during development
         "manifest_path": BASE_DIR / "staticfiles" / "manifest.json",
     },
 }

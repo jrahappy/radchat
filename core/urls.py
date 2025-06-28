@@ -6,4 +6,5 @@ urlpatterns = [
     path("", include("dashboard.urls")),
     path("chat/", include("chat.urls")),
     path("blog/", include("blog.urls")),
+    path("uchi/", include("uchi.urls")),
 ]

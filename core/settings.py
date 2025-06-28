@@ -26,10 +26,14 @@ INSTALLED_APPS = [
     "channels",
     "django_vite",
     "widget_tweaks",
+    "drf_chunked_upload",
+    "rest_framework",
     "core",
     "dashboard",
     "chat",
     "blog",
+    "uchi",
+    "mptt",
 ]
 
 ASGI_APPLICATION = "core.asgi.application"
@@ -119,12 +123,15 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "assets"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+MEDIA_ROOT = "/media/"
+MEDIA_URL = "/media/"
+
 # Ensure to run `python manage.py collectstatic` in production to populate STATIC_ROOT.
 # Verify that Vite build files are correctly placed in the `assets` directory or served by the Vite dev server.
 
 DJANGO_VITE = {
     "default": {
-        "dev_mode": False,  # Set to True during development
+        "dev_mode": True,  # Set to True during development
         "manifest_path": BASE_DIR / "staticfiles" / "manifest.json",
     },
 }
@@ -133,3 +140,7 @@ DJANGO_VITE = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# settings.py
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # 1GB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # 1GB

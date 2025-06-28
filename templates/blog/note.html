@@ -1,0 +1,532 @@
+<!-- notes/templates/notes/note.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ note.title }}</title>
+    <style>
+        body {
+            background-color: #f4f4f9;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .container {
+            background-color: #fff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 90%;
+            margin: 16px;
+        }
+        h1 {
+            font-size: 28px;
+            margin: 0 0 20px;
+            color: #1f2937;
+        }
+        .editor {
+            display: flex;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f9fafb;
+        }
+        .line-numbers {
+            width: 100px;
+            background-color: #f3f4f6;
+            color: #6b7280;
+            text-align: right !important;
+            padding: 16px 8px 16px 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            user-select: none;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        .line-numbers div {
+            height: 21px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end !important;
+            transition: background-color 0.2s;
+            padding-right: 4px;
+        }
+        .line-numbers .active {
+            background-color: #e5e7eb;
+            font-weight: 600;
+        }
+        .collapse-button {
+            cursor: pointer;
+            width: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #4b5563;
+            transition: color 0.2s;
+            display: inline-block;
+        }
+        .collapse-button:hover, .collapse-button:focus {
+            color: #1f2937;
+            outline: none;
+        }
+        .line-numbers div span[style] {
+            width: 20px;
+            display: inline-block;
+            text-align: center;
+        }
+        textarea {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            resize: none;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre;
+            tab-size: 4;
+            box-sizing: border-box;
+            overflow-y: auto;
+            background-color: #fff;
+        }
+        textarea:focus {
+            outline: none;
+            box-shadow: inset 0 0 0 2px #3b82f6;
+        }
+        .keybindings {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .keybindings p {
+            margin: 6px 0;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 16px;
+                width: 95%;
+            }
+            .line-numbers {
+                width: 60px;
+                font-size: 12px;
+            }
+            textarea {
+                font-size: 13px;
+            }
+            .line-numbers div {
+                padding-right: 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <div class="container">
+        <h1>{{ note.title }}</h1>
+        <div class="editor">
+            <div class="line-numbers" id="lineNumbers" role="region" aria-label="Line numbers"></div>
+            <textarea id="noteArea" placeholder="Start typing your notes..." aria-label="Note editor"></textarea>
+        </div>
+        <div class="keybindings">
+            <p><strong>Keybindings:</strong></p>
+            <p>Move Line Up: Alt + Up Arrow</p>
+            <p>Move Line Down: Alt + Down Arrow</p>
+            <p>Correct Indent: Tab</p>
+            <p>De-indent: Shift + Tab</p>
+            <p>Toggle Collapse: Space (on collapse button)</p>
+        </div>
+    </div>
+    <script>
+        const noteArea = document.getElementById('noteArea');
+        const lineNumbers = document.getElementById('lineNumbers');
+        const indentSize = 4;
+        const collapsedRows = new Set();
+        const noteId = {{ note.id }};
+        let isSelecting = false;
+        let rowData = []; // Will be populated from database
+
+        function setEditorHeight() {
+            const lines = noteArea.value.split('\n');
+            const lineHeight = 21;
+            const minHeight = 400;
+            const maxHeight = window.innerHeight * 0.65;
+            const contentHeight = lines.length * lineHeight + 32;
+            const targetHeight = Math.max(minHeight, Math.min(contentHeight, maxHeight));
+            noteArea.style.height = `${targetHeight}px`;
+            lineNumbers.style.height = `${targetHeight}px`;
+        }
+
+        function getIndentLevel(line) {
+            return Math.floor((line.match(/^\s*/)[0].length) / indentSize);
+        }
+
+        function textareaToRowData(text) {
+            const lines = text.split('\n');
+            return lines.map((line, index) => ({
+                content: line.trimStart(),
+                indent_level: getIndentLevel(line),
+                is_collapsed: collapsedRows.has(rowData[index]?.id || index + 1),
+                id: rowData[index]?.id || null,
+                line_number: calculateLineNumber(index, lines),
+            }));
+        }
+
+        function calculateLineNumber(index, lines) {
+            const hierarchy = [0];
+            let currentLevel = 0;
+            for (let i = 0; i <= index; i++) {
+                const level = getIndentLevel(lines[i]);
+                while (currentLevel < level) {
+                    hierarchy.push(0);
+                    currentLevel++;
+                }
+                while (currentLevel > level) {
+                    hierarchy.pop();
+                    currentLevel--;
+                }
+                hierarchy[currentLevel]++;
+                for (let j = currentLevel + 1; j < hierarchy.length; j++) {
+                    hierarchy[j] = 0;
+                }
+            }
+            return hierarchy.slice(0, currentLevel + 1).join('-');
+        }
+
+        function isRowCollapsed(row, allRows) {
+            for (let ancestor of allRows) {
+                if (collapsedRows.has(ancestor.id) && row.line_number.startsWith(ancestor.line_number + "-")) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        async function loadNote() {
+            const response = await fetch(`/notes/note/${noteId}/`, {
+                headers: { "Accept": "application/json" },
+            });
+            const data = await response.json();
+            rowData = data.row_data;
+            collapsedRows.clear();
+            rowData.forEach(row => {
+                if (row.is_collapsed) collapsedRows.add(row.id);
+            });
+            noteArea.value = rowData
+                .filter(row => !isRowCollapsed(row, rowData))
+                .map(row => " ".repeat(row.indent_level * indentSize) + row.content)
+                .join("\n");
+            updateLineNumbers();
+        }
+
+        function updateLineNumbers() {
+            const startPos = noteArea.selectionStart;
+            const endPos = noteArea.selectionEnd;
+            const lines = noteArea.value.split('\n');
+            const cursorLine = noteArea.value.substring(0, startPos).split('\n').length - 1;
+            const numbers = [];
+            const hierarchy = [0];
+            let currentLevel = 0;
+            const childCounts = {};
+            const visibleLines = [];
+            let skipUntilLevel = Infinity;
+
+            lines.forEach((line, index) => {
+                const level = getIndentLevel(line);
+
+                if (level > 0) {
+                    for (let i = index - 1; i >= 0; i--) {
+                        if (getIndentLevel(lines[i]) === level - 1) {
+                            childCounts[i] = (childCounts[i] || 0) + 1;
+                            break;
+                        }
+                    }
+                }
+
+                if (level <= skipUntilLevel) {
+                    skipUntilLevel = Infinity;
+                }
+
+                if (skipUntilLevel !== Infinity) {
+                    return;
+                }
+
+                while (currentLevel < level) {
+                    hierarchy.push(0);
+                    currentLevel++;
+                }
+                while (currentLevel > level) {
+                    hierarchy.pop();
+                    currentLevel--;
+                }
+
+                hierarchy[currentLevel]++;
+                for (let i = currentLevel + 1; i < hierarchy.length; i++) {
+                    hierarchy[i] = 0;
+                }
+
+                const number = hierarchy.slice(0, currentLevel + 1).join('-');
+                const rowId = rowData[visibleLines.length]?.id || index + 1;
+                const isCollapsed = collapsedRows.has(rowId);
+                const hasCollapseButton = (childCounts[index] || 0) > 2;
+                numbers.push({ number, index: rowId, isCollapsed, hasCollapseButton });
+                visibleLines.push(index);
+
+                if (isCollapsed && hasCollapseButton) {
+                    skipUntilLevel = level;
+                }
+            });
+
+            lineNumbers.innerHTML = numbers.length
+                ? numbers.map(({ number, index, isCollapsed, hasCollapseButton }, visibleIndex) => {
+                    const isActive = visibleLines[visibleIndex] === cursorLine && startPos === endPos;
+                    return `<div class="${isActive ? 'active' : ''}">
+                        ${hasCollapseButton
+                            ? `<span class="collapse-button" data-index="${index}" role="button" aria-expanded="${!isCollapsed}" aria-label="${isCollapsed ? 'Expand' : 'Collapse'} section">${isCollapsed ? '▶' : '▼'}</span>`
+                            : '<span style="width: 20px;"></span>'}
+                        ${number}
+                    </div>`;
+                }).join('')
+                : '<div class="active">1</div>';
+
+            lineNumbers.scrollTop = noteArea.scrollTop;
+            setEditorHeight();
+            noteArea.selectionStart = startPos;
+            noteArea.selectionEnd = endPos;
+        }
+
+        async function handleCollapseToggle(rowId) {
+            const response = await fetch(`/notes/note/${noteId}/row/${rowId}/collapse/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                },
+            });
+            const data = await response.json();
+            if (data.status === "success") {
+                if (data.is_collapsed) {
+                    collapsedRows.add(rowId);
+                } else {
+                    collapsedRows.delete(rowId);
+                }
+                rowData = data.row_data;
+                noteArea.value = rowData
+                    .filter(row => !isRowCollapsed(row, rowData))
+                    .map(row => " ".repeat(row.indent_level * indentSize) + row.content)
+                    .join("\n");
+                updateLineNumbers();
+            }
+        }
+
+        loadNote();
+
+        let debounceTimeout;
+        noteArea.addEventListener('input', () => {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(async () => {
+                const rows_data = textareaToRowData(noteArea.value);
+                const response = await fetch(`/notes/note/${noteId}/save/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                    },
+                    body: `rows_data=${encodeURIComponent(JSON.stringify(rows_data))}`,
+                });
+                const data = await response.json();
+                if (data.status === "success") {
+                    rowData = data.row_data;
+                    updateLineNumbers();
+                }
+            }, 100);
+        });
+
+        lineNumbers.addEventListener('click', (e) => {
+            const button = e.target.closest('.collapse-button');
+            if (button) {
+                handleCollapseToggle(parseInt(button.dataset.index));
+            }
+        });
+
+        lineNumbers.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+                const button = e.target.closest('.collapse-button');
+                if (button) {
+                    e.preventDefault();
+                    handleCollapseToggle(parseInt(button.dataset.index));
+                }
+            }
+        });
+
+        noteArea.addEventListener('mousedown', () => {
+            isSelecting = true;
+        });
+
+        noteArea.addEventListener('mouseup', () => {
+            isSelecting = false;
+            updateLineNumbers();
+        });
+
+        noteArea.addEventListener('click', () => {
+            if (!isSelecting) {
+                updateLineNumbers();
+            }
+        });
+
+        noteArea.addEventListener('keyup', (e) => {
+            if (['ArrowUp', 'ArrowDown'].includes(e.key) && !e.altKey) {
+                updateLineNumbers();
+            }
+        });
+
+        noteArea.addEventListener('scroll', () => {
+            lineNumbers.scrollTop = noteArea.scrollTop;
+        });
+
+        lineNumbers.addEventListener('scroll', () => {
+            noteArea.scrollTop = lineNumbers.scrollTop;
+        });
+
+        window.addEventListener('resize', setEditorHeight);
+
+        noteArea.addEventListener('keydown', async (e) => {
+            const start = noteArea.selectionStart;
+            const end = noteArea.selectionEnd;
+            const lines = noteArea.value.split('\n');
+            const cursorLine = noteArea.value.substring(0, start).split('\n').length - 1;
+
+            if (e.key === 'Enter' ||
+                (e.key === 'Tab' && !e.altKey && !e.ctrlKey) ||
+                (e.altKey && ['ArrowUp', 'ArrowDown'].includes(e.key))) {
+                e.preventDefault();
+            }
+
+            if (e.key === 'Enter') {
+                const row = rowData[cursorLine] || { id: null };
+                const response = await fetch(`/notes/note/${noteId}/add_row/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                    },
+                    body: `row_id=${row.id || 0}&cursor_line=${cursorLine}`,
+                });
+                const data = await response.json();
+                if (data.status === "success") {
+                    rowData = data.row_data;
+                    noteArea.value = rowData
+                        .filter(row => !isRowCollapsed(row, rowData))
+                        .map(row => " ".repeat(row.indent_level * indentSize) + row.content)
+                        .join("\n");
+                    const newLineStart = lines.slice(0, cursorLine + 1).join('\n').length + 1;
+                    noteArea.selectionStart = noteArea.selectionEnd = newLineStart;
+                    updateLineNumbers();
+                }
+            }
+
+            if (e.altKey && e.key === 'ArrowUp') {
+                const row = rowData[cursorLine] || { id: null };
+                if (row.id) {
+                    const response = await fetch(`/notes/note/${noteId}/row/${row.id}/move/`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                        },
+                        body: "direction=up",
+                    });
+                    const data = await response.json();
+                    if (data.status === "success") {
+                        rowData = data.row_data;
+                        noteArea.value = rowData
+                            .filter(row => !isRowCollapsed(row, rowData))
+                            .map(row => " ".repeat(row.indent_level * indentSize) + row.content)
+                            .join("\n");
+                        const newLineStart = lines.slice(0, cursorLine - 1).join('\n').length + (cursorLine > 1 ? 1 : 0);
+                        noteArea.selectionStart = noteArea.selectionEnd = newLineStart + (start - lines.slice(0, cursorLine).join('\n').length);
+                        updateLineNumbers();
+                    }
+                }
+            }
+
+            if (e.altKey && e.key === 'ArrowDown') {
+                const row = rowData[cursorLine] || { id: null };
+                if (row.id) {
+                    const response = await fetch(`/notes/note/${noteId}/row/${row.id}/move/`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                        },
+                        body: "direction=down",
+                    });
+                    const data = await response.json();
+                    if (data.status === "success") {
+                        rowData = data.row_data;
+                        noteArea.value = rowData
+                            .filter(row => !isRowCollapsed(row, rowData))
+                            .map(row => " ".repeat(row.indent_level * indentSize) + row.content)
+                            .join("\n");
+                        const newLineStart = lines.slice(0, cursorLine + 1).join('\n').length + (cursorLine > 0 ? 1 : 0);
+                        noteArea.selectionStart = noteArea.selectionEnd = newLineStart + (start - lines.slice(0, cursorLine).join('\n').length);
+                        updateLineNumbers();
+                    }
+                }
+            }
+
+            if (e.key === 'Tab' && !e.shiftKey && !e.altKey && !e.ctrlKey) {
+                const row = rowData[cursorLine] || { id: null };
+                if (row.id) {
+                    const response = await fetch(`/notes/note/${noteId}/row/${row.id}/indent/`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                        },
+                        body: "direction=increase",
+                    });
+                    const data = await response.json();
+                    if (data.status === "success") {
+                        rowData = data.row_data;
+                        noteArea.value = rowData
+                            .filter(row => !isRowCollapsed(row, rowData))
+                            .map(row => " ".repeat(row.indent_level * indentSize) + row.content)
+                            .join("\n");
+                        noteArea.selectionStart = noteArea.selectionEnd = start + indentSize;
+                        updateLineNumbers();
+                    }
+                }
+            }
+
+            if (e.key === 'Tab' && e.shiftKey && !e.altKey && !e.ctrlKey) {
+                const row = rowData[cursorLine] || { id: null };
+                if (row.id) {
+                    const response = await fetch(`/notes/note/${noteId}/row/${row.id}/indent/`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+                        },
+                        body: "direction=decrease",
+                    });
+                    const data = await response.json();
+                    if (data.status === "success") {
+                        rowData = data.row_data;
+                        noteArea.value = rowData
+                            .filter(row => !isRowCollapsed(row, rowData))
+                            .map(row => " ".repeat(row.indent_level * indentSize) + row.content)
+                            .join("\n");
+                        noteArea.selectionStart = noteArea.selectionEnd = start - indentSize;
+                        updateLineNumbers();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

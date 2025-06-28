@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note App</title>
+    <style>
+        body {
+            background-color: #f4f4f9;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .container {
+            background-color: #fff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 90%;
+            margin: 16px;
+        }
+        h1 {
+            font-size: 28px;
+            margin: 0 0 20px;
+            color: #1f2937;
+        }
+        .editor {
+            display: flex;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f9fafb;
+        }
+        .line-numbers {
+            width: 100px;
+            background-color: #f3f4f6;
+            color: #6b7280;
+            text-align: left;
+            padding: 16px 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 10px;
+            line-height: 1.5;
+            user-select: none;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        .line-numbers div {
+            height: 21px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            transition: background-color 0.2s;
+        }
+        .line-numbers .active {
+            background-color: #e5e7eb;
+            font-weight: 600;
+        }
+        .collapse-button {
+            cursor: pointer;
+            margin-right: 4px;
+            font-size: 12px;
+            width: 20px;
+            text-align: center;
+            color: #4b5563;
+            transition: color 0.2s;
+        }
+        .collapse-button:hover, .collapse-button:focus {
+            color: #1f2937;
+            outline: none;
+        }
+        textarea {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            resize: none;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre;
+            tab-size: 4;
+            box-sizing: border-box;
+            overflow-y: auto;
+            background-color: #fff;
+        }
+        textarea:focus {
+            outline: none;
+            box-shadow: inset 0 0 0 2px #3b82f6;
+        }
+        .keybindings {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .keybindings p {
+            margin: 6px 0;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 16px;
+                width: 95%;
+            }
+            .line-numbers {
+                width: 60px;
+                font-size: 12px;
+            }
+            textarea {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Note App</h1>
+        <div class="editor">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <div class="line-numbers" id="lineNumbers" role="region" aria-label="Line numbers"></div>
+            <textarea id="noteArea" placeholder="Start typing your notes..." aria-label="Note editor"></textarea>
+        </div>
+        <div class="keybindings">
+            <p><strong>Keybindings:</strong></p>
+            <p>Move Line Up: Alt + Up Arrow</p>
+            <p>Move Line Down: Alt + Down Arrow</p>
+            <p>Correct Indent: Tab</p>
+            <p>De-indent: Shift + Tab</p>
+            <p>Toggle Collapse: Space (on collapse button)</p>
+        </div>
+    </div>
+    <script>
+        const noteArea = document.getElementById('noteArea');
+        const lineNumbers = document.getElementById('lineNumbers');
+        const indentSize = 4;
+        const collapsedRows = new Set(JSON.parse(localStorage.getItem('collapsedRows') || '[]'));
+        let content = localStorage.getItem('noteContent') || '';
+        let isSelecting = false; // Track mouse drag state
+    
+        function setEditorHeight() {
+            const lines = noteArea.value.split('\n');
+            const lineHeight = 21;
+            const minHeight = 400;
+            const maxHeight = window.innerHeight * 0.65;
+            const contentHeight = lines.length * lineHeight + 32;
+            const targetHeight = Math.max(minHeight, Math.min(contentHeight, maxHeight));
+            noteArea.style.height = `${targetHeight}px`;
+            lineNumbers.style.height = `${targetHeight}px`;
+        }
+    
+        function getIndentLevel(line) {
+            return Math.floor((line.match(/^\s*/)[0].length) / indentSize);
+        }
+    
+        function getBlockRange(lines, startLine) {
+            const startLevel = getIndentLevel(lines[startLine]);
+            let endLine = startLine;
+            for (let i = startLine + 1; i < lines.length; i++) {
+                if (getIndentLevel(lines[i]) <= startLevel) break;
+                endLine = i;
+            }
+            return { start: startLine, end: endLine, level: startLevel };
+        }
+    
+        function findPreviousSameLevelBlock(lines, currentLine) {
+            const currentLevel = getIndentLevel(lines[currentLine]);
+            for (let i = currentLine - 1; i >= 0; i--) {
+                if (getIndentLevel(lines[i]) === currentLevel) {
+                    return getBlockRange(lines, i);
+                }
+            }
+            return null;
+        }
+    
+        function findNextSameLevelBlock(lines, currentLine) {
+            const currentLevel = getIndentLevel(lines[currentLine]);
+            for (let i = currentLine + 1; i < lines.length; i++) {
+                if (getIndentLevel(lines[i]) === currentLevel) {
+                    return getBlockRange(lines, i);
+                }
+            }
+            return null;
+        }
+    
+        function correctIndentation(lines, lineIndex) {
+            const prevLevel = lineIndex > 0 ? getIndentLevel(lines[lineIndex - 1]) : 0;
+            const currentLevel = getIndentLevel(lines[lineIndex]);
+            const targetLevel = currentLevel === prevLevel + 1 ? prevLevel : prevLevel + 1;
+            const content = lines[lineIndex].replace(/^\s*/, '');
+            return ' '.repeat(targetLevel * indentSize) + content;
+        }
+    
+        function updateLineNumbers() {
+            const startPos = noteArea.selectionStart; // Store selection start
+            const endPos = noteArea.selectionEnd; // Store selection end
+            const lines = noteArea.value.split('\n');
+            const cursorLine = noteArea.value.substring(0, startPos).split('\n').length - 1;
+            const numbers = [];
+            const hierarchy = [0];
+            let currentLevel = 0;
+            const childCounts = {};
+            const visibleLines = [];
+            let skipUntilLevel = Infinity;
+    
+            lines.forEach((line, index) => {
+                const level = getIndentLevel(line);
+    
+                if (level > 0) {
+                    for (let i = index - 1; i >= 0; i--) {
+                        if (getIndentLevel(lines[i]) === level - 1) {
+                            childCounts[i] = (childCounts[i] || 0) + 1;
+                            break;
+                        }
+                    }
+                }
+    
+                if (level <= skipUntilLevel) {
+                    skipUntilLevel = Infinity;
+                }
+    
+                if (skipUntilLevel !== Infinity) {
+                    return;
+                }
+    
+                while (currentLevel < level) {
+                    hierarchy.push(0);
+                    currentLevel++;
+                }
+                while (currentLevel > level) {
+                    hierarchy.pop();
+                    currentLevel--;
+                }
+    
+                hierarchy[currentLevel]++;
+                for (let i = currentLevel + 1; i < hierarchy.length; i++) {
+                    hierarchy[i] = 0;
+                }
+    
+                const number = hierarchy.slice(0, currentLevel + 1).join('-');
+                const isCollapsed = collapsedRows.has(index);
+                const hasCollapseButton = (childCounts[index] || 0) > 2;
+                numbers.push({ number, index, isCollapsed, hasCollapseButton });
+                visibleLines.push(index);
+    
+                if (isCollapsed && hasCollapseButton) {
+                    skipUntilLevel = level;
+                }
+            });
+    
+            lineNumbers.innerHTML = numbers.length
+                ? numbers.map(({ number, index, isCollapsed, hasCollapseButton }, visibleIndex) => {
+                    const isActive = visibleLines[visibleIndex] === cursorLine && startPos === endPos;
+                    return `<div class="${isActive ? 'active' : ''}">
+                        ${hasCollapseButton
+                            ? `<span class="collapse-button" data-index="${index}" role="button" aria-expanded="${!isCollapsed}" aria-label="${isCollapsed ? 'Expand' : 'Collapse'} section">${isCollapsed ? '▶' : '▼'}</span>`
+                            : '<span style="width: 20px;"></span>'}
+                        ${number}
+                    </div>`;
+                }).join('')
+                : '<div class="active">1</div>';
+    
+            lineNumbers.scrollTop = noteArea.scrollTop;
+            setEditorHeight();
+            // Restore selection range
+            noteArea.selectionStart = startPos;
+            noteArea.selectionEnd = endPos;
+        }
+    
+        function handleCollapseToggle(index) {
+            if (collapsedRows.has(index)) {
+                collapsedRows.delete(index);
+            } else {
+                collapsedRows.add(index);
+            }
+            localStorage.setItem('collapsedRows', JSON.stringify([...collapsedRows]));
+            updateLineNumbers();
+        }
+    
+        noteArea.value = content.split('\n').filter((_, i) => {
+            let level = getIndentLevel(content.split('\n')[i]);
+            let skip = false;
+            for (let j = i - 1; j >= 0; j--) {
+                if (collapsedRows.has(j) && getIndentLevel(content.split('\n')[j]) < level) {
+                    skip = true;
+                    break;
+                }
+            }
+            return !skip;
+        }).join('\n');
+        updateLineNumbers();
+    
+        let debounceTimeout;
+        noteArea.addEventListener('input', () => {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                const newLines = noteArea.value.split('\n');
+                const fullLines = content.split('\n');
+                const visibleIndices = [];
+                let skipUntilLevel = Infinity;
+    
+                fullLines.forEach((line, i) => {
+                    const level = getIndentLevel(line);
+                    if (level <= skipUntilLevel) skipUntilLevel = Infinity;
+                    if (skipUntilLevel === Infinity) {
+                        visibleIndices.push(i);
+                        if (collapsedRows.has(i)) skipUntilLevel = level;
+                    }
+                });
+    
+                visibleIndices.forEach((fullIndex, visibleIndex) => {
+                    if (visibleIndex < newLines.length) {
+                        fullLines[fullIndex] = newLines[visibleIndex];
+                    }
+                });
+    
+                while (visibleIndices.length < newLines.length) {
+                    fullLines.push(newLines[visibleIndices.length]);
+                    visibleIndices.push(fullLines.length - 1);
+                }
+    
+                content = fullLines.join('\n');
+                localStorage.setItem('noteContent', content);
+                updateLineNumbers();
+            }, 100);
+        });
+    
+        lineNumbers.addEventListener('click', (e) => {
+            const button = e.target.closest('.collapse-button');
+            if (button) {
+                handleCollapseToggle(parseInt(button.dataset.index));
+            }
+        });
+    
+        lineNumbers.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+                const button = e.target.closest('.collapse-button');
+                if (button) {
+                    e.preventDefault();
+                    handleCollapseToggle(parseInt(button.dataset.index));
+                }
+            }
+        });
+    
+        // Modified: Track mouse drag state
+        noteArea.addEventListener('mousedown', () => {
+            isSelecting = true;
+        });
+    
+        noteArea.addEventListener('mouseup', () => {
+            isSelecting = false;
+            updateLineNumbers(); // Update after selection is complete
+        });
+    
+        // Modified: Avoid updating during selection
+        noteArea.addEventListener('click', () => {
+            if (!isSelecting) {
+                updateLineNumbers();
+            }
+        });
+    
+        noteArea.addEventListener('keyup', (e) => {
+            if (['ArrowUp', 'ArrowDown'].includes(e.key) && !e.altKey) {
+                updateLineNumbers();
+            }
+        });
+    
+        noteArea.addEventListener('scroll', () => {
+            lineNumbers.scrollTop = noteArea.scrollTop;
+        });
+    
+        lineNumbers.addEventListener('scroll', () => {
+            noteArea.scrollTop = lineNumbers.scrollTop;
+        });
+    
+        window.addEventListener('resize', setEditorHeight);
+    
+        noteArea.addEventListener('keydown', (e) => {
+            const start = noteArea.selectionStart;
+            const end = noteArea.selectionEnd;
+            const lines = noteArea.value.split('\n');
+            const cursorLine = noteArea.value.substring(0, start).split('\n').length - 1;
+    
+            if (e.key === 'Enter' ||
+                (e.key === 'Tab' && !e.altKey && !e.ctrlKey) ||
+                (e.altKey && ['ArrowUp', 'ArrowDown'].includes(e.key))) {
+                e.preventDefault();
+            }
+    
+            if (e.key === 'Enter') {
+                const fullLines = content.split('\n');
+                const cursorFullLine = content.substring(0, start).split('\n').length - 1;
+                const spaces = (fullLines[cursorFullLine].match(/^\s*/)[0]);
+                const textBefore = fullLines.slice(0, cursorFullLine + 1).join('\n');
+                const textAfter = fullLines.slice(cursorFullLine + 1).join('\n');
+                content = textBefore + '\n' + spaces + (textAfter ? '\n' + textAfter : '');
+                localStorage.setItem('noteContent', content);
+                const newVisibleLines = [...lines];
+                newVisibleLines.splice(cursorLine + 1, 0, spaces);
+                noteArea.value = newVisibleLines.join('\n');
+                const newCursorPos = textBefore.length + spaces.length + 1;
+                noteArea.selectionStart = noteArea.selectionEnd = newCursorPos;
+                updateLineNumbers();
+            }
+    
+            if (e.altKey && e.key === 'ArrowUp') {
+                let block = getBlockRange(lines, cursorLine);
+                const relativeRow = cursorLine - block.start;
+                const prevBlock = findPreviousSameLevelBlock(lines, block.start);
+                if (prevBlock && block.start > 0) {
+                    const newLines = [...lines];
+                    const blockLines = newLines.splice(block.start, block.end - block.start + 1);
+                    newLines.splice(prevBlock.start, 0, ...blockLines);
+                    const fullLines = content.split('\n');
+                    const fullBlockLines = fullLines.splice(block.start, block.end - block.start + 1);
+                    fullLines.splice(prevBlock.start, 0, ...fullBlockLines);
+                    content = fullLines.join('\n');
+                    localStorage.setItem('noteContent', content);
+                    noteArea.value = newLines.join('\n');
+                    const lineStart = content.substring(0, start).lastIndexOf('\n') + 1;
+                    const cursorOffset = start - lineStart;
+                    const newLineStart = newLines.slice(0, prevBlock.start + relativeRow).join('\n').length + (prevBlock.start + relativeRow > 0 ? 1 : 0);
+                    noteArea.selectionStart = noteArea.selectionEnd = newLineStart + cursorOffset;
+                    updateLineNumbers();
+                }
+            }
+    
+            if (e.altKey && e.key === 'ArrowDown') {
+                let block = getBlockRange(lines, cursorLine);
+                const relativeRow = cursorLine - block.start;
+                const nextBlock = findNextSameLevelBlock(lines, block.start);
+                if (nextBlock && block.end < lines.length - 1) {
+                    const newLines = [...lines];
+                    const blockLines = newLines.splice(block.start, block.end - block.start + 1);
+                    newLines.splice(nextBlock.end + 1, 0, ...blockLines);
+                    const fullLines = content.split('\n');
+                    const fullBlockLines = fullLines.splice(block.start, block.end - block.start + 1);
+                    fullLines.splice(nextBlock.end + 1, 0, ...fullBlockLines);
+                    content = fullLines.join('\n');
+                    localStorage.setItem('noteContent', content);
+                    noteArea.value = newLines.join('\n');
+                    const lineStart = content.substring(0, start).lastIndexOf('\n') + 1;
+                    const cursorOffset = start - lineStart;
+                    const newLineStart = newLines.slice(0, nextBlock.end + 1 + relativeRow).join('\n').length + (nextBlock.end + 1 + relativeRow > 0 ? 1 : 0);
+                    noteArea.selectionStart = noteArea.selectionEnd = newLineStart + cursorOffset;
+                    updateLineNumbers();
+                }
+            }
+    
+            if (e.key === 'Tab' && !e.shiftKey && !e.altKey && !e.ctrlKey) {
+                const newLines = [...lines];
+                const fullLines = content.split('\n');
+                if (start === end) {
+                    const cursorFullLine = content.substring(0, start).split('\n').length - 1;
+                    fullLines[cursorFullLine] = correctIndentation(fullLines, cursorFullLine);
+                    content = fullLines.join('\n');
+                    localStorage.setItem('noteContent', content);
+                    newLines[cursorLine] = correctIndentation(lines, cursorLine);
+                    noteArea.value = newLines.join('\n');
+                    const newSpaces = getIndentLevel(newLines[cursorLine]) * indentSize;
+                    const oldSpaces = getIndentLevel(lines[cursorLine]) * indentSize;
+                    noteArea.selectionStart = noteArea.selectionEnd = start + (newSpaces - oldSpaces);
+                    updateLineNumbers();
+                } else {
+                    const startLine = noteArea.value.substring(0, start).split('\n').length - 1;
+                    const endLine = noteArea.value.substring(0, end).split('\n').length - 1;
+                    const startFullLine = content.substring(0, start).split('\n').length - 1;
+                    let cursorAdjust = 0;
+                    for (let i = startLine; i <= endLine; i++) {
+                        const fullIndex = startFullLine + (i - startLine);
+                        const oldSpaces = getIndentLevel(fullLines[fullIndex]) * indentSize;
+                        fullLines[fullIndex] = correctIndentation(fullLines, fullIndex);
+                        const newSpaces = getIndentLevel(fullLines[fullIndex]) * indentSize;
+                        if (i === startLine) cursorAdjust = newSpaces - oldSpaces;
+                        newLines[i] = correctIndentation(lines, i);
+                    }
+                    content = fullLines.join('\n');
+                    localStorage.setItem('noteContent', content);
+                    noteArea.value = newLines.join('\n');
+                    noteArea.selectionStart = start + cursorAdjust;
+                    noteArea.selectionEnd = end + cursorAdjust;
+                    updateLineNumbers();
+                }
+            }
+    
+            if (e.key === 'Tab' && e.shiftKey && !e.altKey && !e.ctrlKey) {
+                const newLines = [...lines];
+                const fullLines = content.split('\n');
+                const startLine = noteArea.value.substring(0, start).split('\n').length - 1;
+                const endLine = noteArea.value.substring(0, end).split('\n').length - 1;
+                const startFullLine = content.substring(0, start).split('\n').length - 1;
+                let startAdjust = 0;
+                let endAdjust = 0;
+                for (let i = startLine; i <= endLine; i++) {
+                    const fullIndex = startFullLine + (i - startLine);
+                    const spaces = fullLines[fullIndex].match(/^\s*/)[0].length;
+                    const remove = Math.min(spaces, indentSize);
+                    fullLines[fullIndex] = fullLines[fullIndex].substring(remove);
+                    newLines[i] = newLines[i].substring(remove);
+                    if (i === startLine) startAdjust = remove;
+                    endAdjust += remove;
+                }
+                content = fullLines.join('\n');
+                localStorage.setItem('noteContent', content);
+                noteArea.value = newLines.join('\n');
+                noteArea.selectionStart = Math.max(0, start - startAdjust);
+                noteArea.selectionEnd = Math.max(0, end - endAdjust);
+                updateLineNumbers();
+            }
+        });
+    </script>
+</body>
+</html>

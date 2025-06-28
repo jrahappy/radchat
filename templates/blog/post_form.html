@@ -51,9 +51,7 @@
                     <textarea name="content" id="content" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"">{{ form.content.value|default_if_none:'' }}</textarea>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </form>
-                <script>
-                    var simplemde = new SimpleMDE({ element: document.getElementById("content") });
-                </script>
+               
             </article>
 
             
@@ -86,24 +84,6 @@
     </div>
 
     <footer class="w-full border-t bg-white pb-12">
-        <div
-            class="relative w-full flex items-center invisible md:visible md:pb-12"
-            x-data="getCarouselData()"
-        >
-            <button
-                class="absolute bg-blue-800 hover:bg-blue-700 text-white text-2xl font-bold hover:shadow rounded-full w-16 h-16 ml-12"
-                x-on:click="decrement()">
-                &#8592;
-            </button>
-            <template x-for="image in images.slice(currentIndex, currentIndex + 6)" :key="images.indexOf(image)">
-                <img class="w-1/6 hover:opacity-75" :src="image">
-            </template>
-            <button
-                class="absolute right-0 bg-blue-800 hover:bg-blue-700 text-white text-2xl font-bold hover:shadow rounded-full w-16 h-16 mr-12"
-                x-on:click="increment()">
-                &#8594;
-            </button>
-        </div>
         <div class="w-full container mx-auto flex flex-col items-center">
             <div class="flex flex-col md:flex-row text-center md:text-left md:justify-between py-6">
                 <a href="#" class="uppercase px-3">About Us</a>
@@ -114,5 +94,18 @@
             <div class="uppercase pb-6">&copy; myblog.com</div>
         </div>
     </footer>
+
+    <script>
+        var simplemde = new SimpleMDE({
+            element: document.getElementById("content"),
+            toolbar: [
+                "bold", "italic", "heading", "|",
+                "quote", "unordered-list", "ordered-list", "|",
+                "link", "image", "|",
+                "preview", "side-by-side", "fullscreen"
+            ],
+            spellChecker: false, // Optional: Disable spell checker
+        });
+    </script>
 
 {% endblock %}

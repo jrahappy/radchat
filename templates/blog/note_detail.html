@@ -5,7 +5,7 @@
     <header class="w-full container mx-auto">
         <div class="flex flex-col items-center py-12">
             <a class="font-bold text-gray-800 uppercase hover:text-gray-700 text-5xl" href="#">
-                Minimal Blog
+                Notes
             </a>
             <p class="text-lg text-gray-600">
                 Lorem Ipsum Dolor Sit Amet
@@ -47,22 +47,41 @@
                 <div class="bg-white flex flex-col justify-start p-6">
                     <a href="#" class="text-blue-700 text-sm font-bold uppercase pb-4">Technology</a>
                     <p class="text-3xl font-bold hover:text-gray-700 pb-4">
-                        {{ post.title }}
+                        {{ note.title }}
                     </p>
                     <p href="#" class="text-sm pb-8">
                         By <a href="#" class="font-semibold hover:text-gray-800">
-                            {{ post.author }}
-                        </a>, Published on {{ post.created_at|date:"F jS, Y" }}
-                        
+                            {{ note.owner }}
+                        </a>, Published on {{ note.created_at|date:"F jS, Y" }}
                     </p>
                     <article class="markdown-content w-full">
-                        {% if post.image %}
-                            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-auto mb-4">
-                        {% endif %}
-                    <p class="markdown-content w-full">
-                           
-                        {{ post.content_html|safe }}
-                    </p>
+                        <p class="markdown-content w-full">
+                            <ul role="list" class="divide-y divide-gray-100">
+                                {% for row in rows %}
+                                <li class="flex items-center justify-between gap-x-6 py-2">
+                                <div class="min-w-0">
+                                        <div class="flex items-start gap-x-3">
+                                            <p class="w-24 mt-0.5 whitespace-nowrap rounded-md bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">{{ row.order}}-{{row.indent_level}}</p>
+                                            <p class="text-sm/6 font-semibold text-gray-900"> {{ row.task }}</p>
+                                        </div>
+                                        <div class="mt-1 flex items-center gap-x-2 text-xs/5 text-gray-500">
+                                            <p class="whitespace-nowrap">Due on <time datetime="2023-03-17T00:00Z">March 17, 2023</time></p>
+                                            <svg viewBox="0 0 2 2" class="size-0.5 fill-current">
+                                                <circle cx="1" cy="1" r="1" />
+                                            </svg>
+                                            <p class="truncate">Created by Leslie Alexander</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-none items-center gap-x-4">
+                                        <div class="relative flex-none">
+                                            <a class="link" href="{{ row.link }}" targer="_blank">Go to Link</a>
+                                        </div>
+                                    </div>
+                                </li>
+                        
+                            {% endfor %}
+                            </ul>
+                        </p>
                     </article>
                     
                 </div>

@@ -22,4 +22,10 @@ export default defineConfig({
     plugins: [
         tailwindcss(),
     ],
+    server: {
+        watch: {
+            // Watch the templates folder for changes
+            ignored: ['!**/templates/**']
+        }
+    }
   })

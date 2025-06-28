@@ -13,30 +13,1827 @@
     
     {% vite_hmr_client %}
     {% vite_asset 'static/js/main.js' %}
-    <!-- {% vite_asset_url 'static/js/main.js' %} -->
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <style>
+      body {
+          font-family: 'Inter', sans-serif;
+      }
+    .hero-section {
+        background-image: linear-gradient(to right, rgba(255, 255, 255, 0.9) 40%, rgba(255, 255, 255, 0.7) 60%, rgba(255, 255, 255, 0.4) 80%, rgba(255, 255, 255, 0) 100%), url('https://readdy.ai/api/search-image?query=Modern%20medical%20imaging%20center%20with%20advanced%20MRI%20and%20CT%20scan%20equipment%20in%20a%20clean%2C%20professional%20hospital%20environment%20with%20soft%20lighting%20and%20blue%20accents.%20The%20left%20side%20of%20the%20image%20has%20a%20clean%20white%20background%20that%20gradually%20transitions%20to%20show%20the%20equipment%20on%20the%20right%20side.&width=1920&height=800&seq=1&orientation=landscape');
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    </style>
 </head>
-<body class="bg-gray-300">
-<div class="container mx-auto p-10">
-    {% block header %}
-    {% include 'header.html' %}
-    {% endblock %}
-
-    {% block messages %}
-    {% if messages %}
-        <div class="alert alert-info">
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
+<body class="bg-gray-50">
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-sm">
+      <div
+        class="container mx-auto px-4 py-3 flex justify-between items-center"
+      >
+        <div class="flex items-center">
+          <h1 class="text-3xl font-['Pacifico'] text-primary">logo</h1>
         </div>
-    {% endif %}
-    {% endblock %}
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="#" class="text-gray-700 hover:text-primary font-medium"
+            >Home</a
+          >
+          <a
+            href="#services"
+            class="text-gray-700 hover:text-primary font-medium"
+            >Services</a
+          >
+          <a
+            href="#booking"
+            class="text-gray-700 hover:text-primary font-medium"
+            >Book Appointment</a
+          >
+          <a
+            href="#careers"
+            class="text-gray-700 hover:text-primary font-medium"
+            >Careers</a
+          >
+          <a
+            href="#inquiry"
+            class="text-gray-700 hover:text-primary font-medium"
+            >Service Inquiry</a
+          >
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="hidden md:block">
+            <div class="text-sm text-gray-500">Emergency</div>
+            <div class="font-semibold text-gray-800">(800) 555-1234</div>
+          </div>
+          <a
+            href="#booking"
+            class="bg-primary text-white px-6 py-2 !rounded-button whitespace-nowrap hover:bg-blue-700 transition duration-300"
+            >Book Now</a
+          >
+        </div>
+      </div>
+    </header>
 
-    {% block content %}
-    {% endblock %}
+    <!-- Hero Section -->
+    <section class="hero-section py-20">
+      <div class="container mx-auto px-4 w-full">
+        <div class="max-w-2xl">
+          <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+            Advanced Diagnostic Imaging for Precise Care
+          </h1>
+          <p class="text-lg text-gray-600 mb-8">
+            State-of-the-art technology and expert radiologists committed to
+            accurate diagnoses and exceptional patient care.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a
+              href="#booking"
+              class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-blue-700 transition duration-300 font-medium"
+              >Book Appointment</a
+            >
+            <a
+              href="#services"
+              class="bg-white text-primary border border-primary px-6 py-3 !rounded-button whitespace-nowrap hover:bg-gray-50 transition duration-300 font-medium"
+              >View Services</a
+            >
+            <a
+              href="#careers"
+              class="bg-secondary text-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-blue-500 transition duration-300 font-medium"
+              >Join Our Team</a
+            >
+          </div>
+          <div class="mt-10 flex items-center space-x-6">
+            <div class="flex flex-col items-center">
+              <div class="text-3xl font-bold text-primary">25+</div>
+              <div class="text-sm text-gray-600">Years Experience</div>
+            </div>
+            <div class="h-10 w-px bg-gray-300"></div>
+            <div class="flex flex-col items-center">
+              <div class="text-3xl font-bold text-primary">99%</div>
+              <div class="text-sm text-gray-600">Patient Satisfaction</div>
+            </div>
+            <div class="h-10 w-px bg-gray-300"></div>
+            <div class="flex flex-col items-center">
+              <div class="text-3xl font-bold text-primary">ACR</div>
+              <div class="text-sm text-gray-600">Accredited</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-</div>
-</body>
+    <!-- Services Section -->
+    <section id="services" class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">
+            Our Imaging Services
+          </h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">
+            Comprehensive diagnostic imaging services using the latest
+            technology for accurate and timely results.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Service 1 -->
+          <div
+            class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-blue-50 rounded-full mb-4"
+            >
+              <i class="ri-pulse-line text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">
+              Magnetic Resonance Imaging (MRI)
+            </h3>
+            <p class="text-gray-600 mb-4">
+              High-resolution imaging for detailed views of organs, soft
+              tissues, bones, and other internal body structures.
+            </p>
+            <a href="#" class="text-primary font-medium flex items-center">
+              Learn More
+              <i class="ri-arrow-right-line ml-1"></i>
+            </a>
+          </div>
+
+          <!-- Service 2 -->
+          <div
+            class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-blue-50 rounded-full mb-4"
+            >
+              <i class="ri-scan-2-line text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">
+              Computed Tomography (CT) Scan
+            </h3>
+            <p class="text-gray-600 mb-4">
+              Advanced cross-sectional imaging that combines X-ray technology
+              with computer processing for detailed internal views.
+            </p>
+            <a href="#" class="text-primary font-medium flex items-center">
+              Learn More
+              <i class="ri-arrow-right-line ml-1"></i>
+            </a>
+          </div>
+
+          <!-- Service 3 -->
+          <div
+            class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-blue-50 rounded-full mb-4"
+            >
+              <i class="ri-heart-pulse-line text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">Ultrasound</h3>
+            <p class="text-gray-600 mb-4">
+              Non-invasive imaging that uses sound waves to produce images of
+              structures within the body.
+            </p>
+            <a href="#" class="text-primary font-medium flex items-center">
+              Learn More
+              <i class="ri-arrow-right-line ml-1"></i>
+            </a>
+          </div>
+
+          <!-- Service 4 -->
+          <div
+            class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-blue-50 rounded-full mb-4"
+            >
+              <i class="ri-microscope-line text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">X-Ray</h3>
+            <p class="text-gray-600 mb-4">
+              Quick and painless imaging test that produces images of the
+              structures inside your body, particularly bones.
+            </p>
+            <a href="#" class="text-primary font-medium flex items-center">
+              Learn More
+              <i class="ri-arrow-right-line ml-1"></i>
+            </a>
+          </div>
+
+          <!-- Service 5 -->
+          <div
+            class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-blue-50 rounded-full mb-4"
+            >
+              <i class="ri-women-line text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">
+              Mammography
+            </h3>
+            <p class="text-gray-600 mb-4">
+              Specialized medical imaging that uses a low-dose X-ray system for
+              examination of the breasts.
+            </p>
+            <a href="#" class="text-primary font-medium flex items-center">
+              Learn More
+              <i class="ri-arrow-right-line ml-1"></i>
+            </a>
+          </div>
+
+          <!-- Service 6 -->
+          <div
+            class="service-card bg-white rounded-lg shadow-md p-6 transition duration-300"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-blue-50 rounded-full mb-4"
+            >
+              <i class="ri-bone-line text-primary text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">
+              Bone Density Scan
+            </h3>
+            <p class="text-gray-600 mb-4">
+              Measures bone mineral density to assess strength and risk of
+              fractures, primarily for osteoporosis diagnosis.
+            </p>
+            <a href="#" class="text-primary font-medium flex items-center">
+              Learn More
+              <i class="ri-arrow-right-line ml-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technology Showcase -->
+    <section class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">
+            Advanced Technology
+          </h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">
+            Our center is equipped with the latest imaging technology to provide
+            the most accurate diagnoses.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <img
+              src="https://readdy.ai/api/search-image?query=Modern%203T%20MRI%20machine%20in%20a%20clean%20medical%20facility%20with%20blue%20lighting%20accents%2C%20professional%20medical%20environment%2C%20high-tech%20medical%20equipment%20with%20a%20comfortable%20patient%20bed%20and%20advanced%20imaging%20technology%20visible.&width=600&height=400&seq=2&orientation=landscape"
+              alt="MRI Machine"
+              class="w-full h-64 object-cover object-top"
+            />
+            <div class="p-6">
+              <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                3T MRI Scanner
+              </h3>
+              <p class="text-gray-600 mb-4">
+                Our state-of-the-art 3 Tesla MRI provides exceptional image
+                quality with faster scan times and improved patient comfort.
+              </p>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-gray-50 p-3 rounded">
+                  <span class="text-sm text-gray-500">Field Strength</span>
+                  <p class="font-medium text-gray-800">3.0 Tesla</p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded">
+                  <span class="text-sm text-gray-500">Bore Size</span>
+                  <p class="font-medium text-gray-800">70cm Wide Bore</p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded">
+                  <span class="text-sm text-gray-500">Scan Time</span>
+                  <p class="font-medium text-gray-800">15-45 Minutes</p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded">
+                  <span class="text-sm text-gray-500">Applications</span>
+                  <p class="font-medium text-gray-800">Neuro, MSK, Body</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <img
+              src="https://readdy.ai/api/search-image?query=Modern%20CT%20scanner%20in%20a%20clean%20medical%20facility%20with%20blue%20lighting%20accents%2C%20professional%20medical%20environment%2C%20high-tech%20medical%20equipment%20with%20a%20comfortable%20patient%20bed%20and%20advanced%20imaging%20technology%20visible.&width=600&height=400&seq=3&orientation=landscape"
+              alt="CT Scanner"
+              class="w-full h-64 object-cover object-top"
+            />
+            <div class="p-6">
+              <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                128-Slice CT Scanner
+              </h3>
+              <p class="text-gray-600 mb-4">
+                Our advanced CT scanner delivers exceptional image clarity with
+                reduced radiation exposure and rapid acquisition times.
+              </p>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-gray-50 p-3 rounded">
+                  <span class="text-sm text-gray-500">Slices</span>
+                  <p class="font-medium text-gray-800">128 Slices</p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded">
+                  <span class="text-sm text-gray-500">Scan Speed</span>
+                  <p class="font-medium text-gray-800">0.35 sec/rotation</p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded">
+                  <span class="text-sm text-gray-500">Dose Reduction</span>
+                  <p class="font-medium text-gray-800">Up to 40%</p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded">
+                  <span class="text-sm text-gray-500">Applications</span>
+                  <p class="font-medium text-gray-800">Cardiac, Neuro, Body</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Patient Resources -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">
+            Patient Resources
+          </h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">
+            Everything you need to know before, during, and after your visit to
+            our imaging center.
+          </p>
+        </div>
+
+        <div class="max-w-4xl mx-auto">
+          <!-- Tabs -->
+          <div class="flex flex-wrap border-b border-gray-200 mb-6">
+            <button
+              class="tab-button px-6 py-3 font-medium text-primary border-b-2 border-primary"
+              data-tab="preparation"
+            >
+              Preparation Guidelines
+            </button>
+            <button
+              class="tab-button px-6 py-3 font-medium text-gray-500 hover:text-primary"
+              data-tab="insurance"
+            >
+              Insurance Information
+            </button>
+            <button
+              class="tab-button px-6 py-3 font-medium text-gray-500 hover:text-primary"
+              data-tab="forms"
+            >
+              Forms & Documents
+            </button>
+            <button
+              class="tab-button px-6 py-3 font-medium text-gray-500 hover:text-primary"
+              data-tab="faq"
+            >
+              FAQs
+            </button>
+          </div>
+
+          <!-- Tab Content -->
+          <div class="tab-content active" id="preparation">
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+              <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                MRI Preparation
+              </h3>
+              <ul class="space-y-3 text-gray-600">
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >Wear comfortable, loose-fitting clothing without metal
+                    fasteners</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >Remove all metal objects (jewelry, watches, hair pins,
+                    etc.)</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >Inform staff of any implanted medical devices or metal in
+                    your body</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >Arrive 30 minutes before your scheduled appointment</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >For contrast studies, you may need to fast for 4-6 hours
+                    prior</span
+                  >
+                </li>
+              </ul>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                CT Scan Preparation
+              </h3>
+              <ul class="space-y-3 text-gray-600">
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >Wear comfortable clothing without metal zippers or
+                    buttons</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >You may be asked to fast for 4 hours before your exam if
+                    contrast is used</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >Inform staff if you have allergies to iodine or contrast
+                    materials</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >Arrive 15 minutes before your scheduled appointment</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >Bring your doctor's referral and any previous imaging
+                    studies</span
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tab-content" id="insurance">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                Accepted Insurance Plans
+              </h3>
+              <p class="text-gray-600 mb-6">
+                We accept most major insurance plans. Please contact our office
+                to verify your specific coverage.
+              </p>
+
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                <div class="flex items-center p-3 bg-gray-50 rounded">
+                  <i class="ri-shield-check-line text-primary mr-2"></i>
+                  <span class="text-gray-700">Blue Cross Blue Shield</span>
+                </div>
+                <div class="flex items-center p-3 bg-gray-50 rounded">
+                  <i class="ri-shield-check-line text-primary mr-2"></i>
+                  <span class="text-gray-700">Aetna</span>
+                </div>
+                <div class="flex items-center p-3 bg-gray-50 rounded">
+                  <i class="ri-shield-check-line text-primary mr-2"></i>
+                  <span class="text-gray-700">Cigna</span>
+                </div>
+                <div class="flex items-center p-3 bg-gray-50 rounded">
+                  <i class="ri-shield-check-line text-primary mr-2"></i>
+                  <span class="text-gray-700">UnitedHealthcare</span>
+                </div>
+                <div class="flex items-center p-3 bg-gray-50 rounded">
+                  <i class="ri-shield-check-line text-primary mr-2"></i>
+                  <span class="text-gray-700">Medicare</span>
+                </div>
+                <div class="flex items-center p-3 bg-gray-50 rounded">
+                  <i class="ri-shield-check-line text-primary mr-2"></i>
+                  <span class="text-gray-700">Medicaid</span>
+                </div>
+              </div>
+
+              <h4 class="font-semibold text-gray-800 mb-3">What to Bring</h4>
+              <ul class="space-y-2 text-gray-600 mb-6">
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span>Current insurance card</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span>Photo ID</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >Referral or authorization from your doctor (if
+                    required)</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-checkbox-circle-line text-primary mr-2 mt-1"></i>
+                  <span>Co-payment (if applicable)</span>
+                </li>
+              </ul>
+
+              <div class="bg-blue-50 p-4 rounded-lg">
+                <p class="text-gray-700">
+                  For questions about your specific insurance coverage or to
+                  verify benefits, please call our billing department at (800)
+                  555-5678.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="forms">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                Downloadable Forms
+              </h3>
+              <p class="text-gray-600 mb-6">
+                Save time by downloading and completing these forms before your
+                visit.
+              </p>
+
+              <div class="space-y-4">
+                <div
+                  class="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
+                >
+                  <div class="flex items-center">
+                    <div
+                      class="w-10 h-10 flex items-center justify-center bg-red-100 rounded-full mr-3"
+                    >
+                      <i class="ri-file-pdf-line text-red-600"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-gray-800">
+                        Patient Registration Form
+                      </h4>
+                      <p class="text-sm text-gray-500">PDF, 2 pages</p>
+                    </div>
+                  </div>
+                  <a
+                    href="#"
+                    class="flex items-center text-primary font-medium hover:text-blue-700"
+                  >
+                    <span>Download</span>
+                    <i class="ri-download-line ml-1"></i>
+                  </a>
+                </div>
+
+                <div
+                  class="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
+                >
+                  <div class="flex items-center">
+                    <div
+                      class="w-10 h-10 flex items-center justify-center bg-red-100 rounded-full mr-3"
+                    >
+                      <i class="ri-file-pdf-line text-red-600"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-gray-800">
+                        Medical History Questionnaire
+                      </h4>
+                      <p class="text-sm text-gray-500">PDF, 3 pages</p>
+                    </div>
+                  </div>
+                  <a
+                    href="#"
+                    class="flex items-center text-primary font-medium hover:text-blue-700"
+                  >
+                    <span>Download</span>
+                    <i class="ri-download-line ml-1"></i>
+                  </a>
+                </div>
+
+                <div
+                  class="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
+                >
+                  <div class="flex items-center">
+                    <div
+                      class="w-10 h-10 flex items-center justify-center bg-red-100 rounded-full mr-3"
+                    >
+                      <i class="ri-file-pdf-line text-red-600"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-gray-800">
+                        HIPAA Privacy Acknowledgment
+                      </h4>
+                      <p class="text-sm text-gray-500">PDF, 1 page</p>
+                    </div>
+                  </div>
+                  <a
+                    href="#"
+                    class="flex items-center text-primary font-medium hover:text-blue-700"
+                  >
+                    <span>Download</span>
+                    <i class="ri-download-line ml-1"></i>
+                  </a>
+                </div>
+
+                <div
+                  class="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
+                >
+                  <div class="flex items-center">
+                    <div
+                      class="w-10 h-10 flex items-center justify-center bg-red-100 rounded-full mr-3"
+                    >
+                      <i class="ri-file-pdf-line text-red-600"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-gray-800">
+                        MRI Safety Screening Form
+                      </h4>
+                      <p class="text-sm text-gray-500">PDF, 2 pages</p>
+                    </div>
+                  </div>
+                  <a
+                    href="#"
+                    class="flex items-center text-primary font-medium hover:text-blue-700"
+                  >
+                    <span>Download</span>
+                    <i class="ri-download-line ml-1"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-content" id="faq">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+              <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                Frequently Asked Questions
+              </h3>
+
+              <div class="space-y-6">
+                <div>
+                  <h4 class="font-medium text-gray-800 mb-2">
+                    How do I prepare for an MRI?
+                  </h4>
+                  <p class="text-gray-600">
+                    For most MRI exams, no special preparation is needed. Wear
+                    comfortable clothing without metal fasteners. You'll need to
+                    remove all metal objects, including jewelry, watches, and
+                    hearing aids. For some exams, you may need to fast for 4-6
+                    hours prior. Our staff will provide specific instructions
+                    when scheduling your appointment.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-medium text-gray-800 mb-2">
+                    How long do imaging procedures take?
+                  </h4>
+                  <p class="text-gray-600">
+                    Procedure times vary depending on the type of exam. X-rays
+                    typically take 15-30 minutes, ultrasounds 30-45 minutes, CT
+                    scans 15-30 minutes, and MRIs 30-60 minutes. These times
+                    include preparation and the actual scan time.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-medium text-gray-800 mb-2">
+                    When will I get my results?
+                  </h4>
+                  <p class="text-gray-600">
+                    Our radiologists interpret exams promptly, usually within
+                    24-48 hours. The results are sent to your referring
+                    physician, who will discuss them with you. For urgent cases,
+                    results can be expedited and available the same day.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-medium text-gray-800 mb-2">
+                    Is radiation from imaging procedures safe?
+                  </h4>
+                  <p class="text-gray-600">
+                    We follow the ALARA principle (As Low As Reasonably
+                    Achievable) for radiation exposure. Our modern equipment
+                    uses the lowest possible dose while maintaining diagnostic
+                    quality. MRI and ultrasound do not use radiation at all. The
+                    benefits of accurate diagnosis typically far outweigh the
+                    minimal risks.
+                  </p>
+                </div>
+
+                <div>
+                  <h4 class="font-medium text-gray-800 mb-2">
+                    Can I bring someone with me to my appointment?
+                  </h4>
+                  <p class="text-gray-600">
+                    Yes, you may bring a friend or family member for support.
+                    They can stay with you during registration and preparation,
+                    but may need to remain in the waiting area during the actual
+                    procedure, depending on the type of exam.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">
+            Book Your Appointment
+          </h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">
+            Schedule your imaging appointment quickly and easily. Our team will
+            confirm your booking within 24 hours.
+          </p>
+        </div>
+
+        <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8">
+          <form id="appointment-form">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label
+                  for="first-name"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >First Name</label
+                >
+                <input
+                  type="text"
+                  id="first-name"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="last-name"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Last Name</label
+                >
+                <input
+                  type="text"
+                  id="last-name"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="email"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Email Address</label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="phone"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Phone Number</label
+                >
+                <input
+                  type="tel"
+                  id="phone"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Service Type</label
+              >
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <label class="custom-checkbox">
+                  <input type="radio" name="service" value="mri" />
+                  <span class="checkmark"></span>
+                  MRI
+                </label>
+                <label class="custom-checkbox">
+                  <input type="radio" name="service" value="ct" />
+                  <span class="checkmark"></span>
+                  CT Scan
+                </label>
+                <label class="custom-checkbox">
+                  <input type="radio" name="service" value="ultrasound" />
+                  <span class="checkmark"></span>
+                  Ultrasound
+                </label>
+                <label class="custom-checkbox">
+                  <input type="radio" name="service" value="xray" />
+                  <span class="checkmark"></span>
+                  X-Ray
+                </label>
+                <label class="custom-checkbox">
+                  <input type="radio" name="service" value="mammography" />
+                  <span class="checkmark"></span>
+                  Mammography
+                </label>
+                <label class="custom-checkbox">
+                  <input type="radio" name="service" value="dexa" />
+                  <span class="checkmark"></span>
+                  Bone Density
+                </label>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label
+                  for="preferred-date"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Preferred Date</label
+                >
+                <input
+                  type="date"
+                  id="preferred-date"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                  required
+                  min="2025-06-20"
+                />
+              </div>
+              <div>
+                <label
+                  for="preferred-time"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Preferred Time</label
+                >
+                <select
+                  id="preferred-time"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary pr-8"
+                  required
+                >
+                  <option value="">Select a time</option>
+                  <option value="morning">Morning (8:00 AM - 12:00 PM)</option>
+                  <option value="afternoon">
+                    Afternoon (12:00 PM - 4:00 PM)
+                  </option>
+                  <option value="evening">Evening (4:00 PM - 7:00 PM)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <label
+                for="insurance"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Insurance Provider</label
+              >
+              <input
+                type="text"
+                id="insurance"
+                class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+              />
+            </div>
+
+            <div class="mb-6">
+              <label
+                for="notes"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Additional Information</label
+              >
+              <textarea
+                id="notes"
+                rows="3"
+                class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+              ></textarea>
+            </div>
+
+            <div class="mb-6">
+              <label class="custom-checkbox">
+                <input type="checkbox" required />
+                <span class="checkmark"></span>
+                I acknowledge that a physician referral is required for most
+                imaging services
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-blue-700 transition duration-300 font-medium w-full md:w-auto"
+            >
+              Schedule Appointment
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Careers Section -->
+    <section id="careers" class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Join Our Team</h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">
+            We're looking for talented radiologists and imaging professionals to
+            join our growing team.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+              <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                Current Openings
+              </h3>
+
+              <div class="space-y-6">
+                <div class="border-b border-gray-200 pb-6">
+                  <h4 class="font-semibold text-gray-800 mb-2">
+                    Diagnostic Radiologist
+                  </h4>
+                  <p class="text-gray-600 mb-3">
+                    Full-time position for a board-certified radiologist with
+                    expertise in MRI and CT interpretation. Minimum 3 years of
+                    experience required.
+                  </p>
+                  <div class="flex flex-wrap gap-2 mb-4">
+                    <span
+                      class="bg-blue-50 text-primary px-3 py-1 rounded-full text-sm"
+                      >Full-time</span
+                    >
+                    <span
+                      class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+                      >On-site</span
+                    >
+                  </div>
+                  <button
+                    class="text-primary font-medium hover:text-blue-700"
+                    onclick="showJobDetails('radiologist')"
+                  >
+                    View Details
+                  </button>
+                </div>
+
+                <div class="border-b border-gray-200 pb-6">
+                  <h4 class="font-semibold text-gray-800 mb-2">
+                    MRI Technologist
+                  </h4>
+                  <p class="text-gray-600 mb-3">
+                    Seeking an experienced MRI technologist with ARRT
+                    certification. Experience with 3T MRI systems preferred.
+                  </p>
+                  <div class="flex flex-wrap gap-2 mb-4">
+                    <span
+                      class="bg-blue-50 text-primary px-3 py-1 rounded-full text-sm"
+                      >Full-time</span
+                    >
+                    <span
+                      class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+                      >On-site</span
+                    >
+                  </div>
+                  <button
+                    class="text-primary font-medium hover:text-blue-700"
+                    onclick="showJobDetails('mri-tech')"
+                  >
+                    View Details
+                  </button>
+                </div>
+
+                <div>
+                  <h4 class="font-semibold text-gray-800 mb-2">
+                    Ultrasound Technologist
+                  </h4>
+                  <p class="text-gray-600 mb-3">
+                    Registered ultrasound technologist with experience in
+                    abdominal, vascular, and OB/GYN ultrasound. ARDMS
+                    certification required.
+                  </p>
+                  <div class="flex flex-wrap gap-2 mb-4">
+                    <span
+                      class="bg-blue-50 text-primary px-3 py-1 rounded-full text-sm"
+                      >Part-time</span
+                    >
+                    <span
+                      class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+                      >On-site</span
+                    >
+                  </div>
+                  <button
+                    class="text-primary font-medium hover:text-blue-700"
+                    onclick="showJobDetails('ultrasound-tech')"
+                  >
+                    View Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+              <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                Why Join Us
+              </h3>
+              <ul class="space-y-3 text-gray-600">
+                <li class="flex items-start">
+                  <i class="ri-check-line text-primary mr-2 mt-1"></i>
+                  <span>State-of-the-art imaging equipment and facilities</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-check-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >Competitive salary and comprehensive benefits package</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-check-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >Continuing education and professional development
+                    opportunities</span
+                  >
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-check-line text-primary mr-2 mt-1"></i>
+                  <span>Collaborative and supportive work environment</span>
+                </li>
+                <li class="flex items-start">
+                  <i class="ri-check-line text-primary mr-2 mt-1"></i>
+                  <span
+                    >Work-life balance with flexible scheduling options</span
+                  >
+                </li>
+              </ul>
+            </div>
+
+            <div class="bg-primary rounded-lg shadow-md p-6 text-white">
+              <h3 class="text-xl font-semibold mb-4">Employee Testimonial</h3>
+              <p class="italic mb-4">
+                "Working at Advanced Imaging Center has been incredibly
+                rewarding. The team is supportive, the equipment is
+                cutting-edge, and I'm constantly learning and growing as a
+                professional."
+              </p>
+              <div class="flex items-center">
+                <div
+                  class="w-12 h-12 bg-white rounded-full flex items-center justify-center mr-3"
+                >
+                  <i class="ri-user-line text-primary text-xl"></i>
+                </div>
+                <div>
+                  <p class="font-medium">Dr. Rebecca Johnson</p>
+                  <p class="text-sm text-blue-100">Radiologist, 5 years</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8"
+          id="application-form"
+          style="display: none;"
+        >
+          <div class="flex justify-between items-center mb-6">
+            <h3
+              class="text-xl font-semibold text-gray-800"
+              id="job-application-title"
+            >
+              Job Application
+            </h3>
+            <button
+              onclick="hideApplicationForm()"
+              class="text-gray-500 hover:text-gray-700"
+            >
+              <i class="ri-close-line text-xl"></i>
+            </button>
+          </div>
+
+          <form id="career-application-form">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label
+                  for="app-first-name"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >First Name</label
+                >
+                <input
+                  type="text"
+                  id="app-first-name"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="app-last-name"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Last Name</label
+                >
+                <input
+                  type="text"
+                  id="app-last-name"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="app-email"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Email Address</label
+                >
+                <input
+                  type="email"
+                  id="app-email"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="app-phone"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Phone Number</label
+                >
+                <input
+                  type="tel"
+                  id="app-phone"
+                  class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <label
+                for="app-experience"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Years of Experience</label
+              >
+              <input
+                type="number"
+                id="app-experience"
+                min="0"
+                max="50"
+                class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                required
+              />
+            </div>
+
+            <div class="mb-6">
+              <label
+                for="app-certifications"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Certifications</label
+              >
+              <input
+                type="text"
+                id="app-certifications"
+                class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                placeholder="e.g., ARRT, ARDMS, ABR"
+                required
+              />
+            </div>
+
+            <div class="mb-6">
+              <label
+                for="app-cover-letter"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Cover Letter</label
+              >
+              <textarea
+                id="app-cover-letter"
+                rows="4"
+                class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                required
+              ></textarea>
+            </div>
+
+            <div class="mb-6">
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Upload Resume/CV</label
+              >
+              <div class="flex items-center justify-center w-full">
+                <label
+                  class="flex flex-col w-full h-32 border-2 border-dashed border-gray-300 rounded-lg hover:bg-gray-50 cursor-pointer"
+                >
+                  <div class="flex flex-col items-center justify-center pt-7">
+                    <i class="ri-upload-2-line text-gray-400 text-3xl"></i>
+                    <p class="pt-1 text-sm text-gray-500">
+                      Drag and drop or click to upload
+                    </p>
+                    <p class="text-xs text-gray-400">
+                      PDF, DOC, or DOCX (Max 5MB)
+                    </p>
+                  </div>
+                  <input
+                    type="file"
+                    class="opacity-0"
+                    accept=".pdf,.doc,.docx"
+                    required
+                  />
+                </label>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <label class="custom-checkbox">
+                <input type="checkbox" required />
+                <span class="checkmark"></span>
+                I certify that all information provided is true and complete
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-blue-700 transition duration-300 font-medium w-full md:w-auto"
+            >
+              Submit Application
+            </button>
+          </form>
+        </div>
+
+        <div
+          class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8"
+          id="job-details"
+          style="display: none;"
+        >
+          <div class="flex justify-between items-center mb-6">
+            <h3
+              class="text-xl font-semibold text-gray-800"
+              id="job-details-title"
+            >
+              Job Details
+            </h3>
+            <button
+              onclick="hideJobDetails()"
+              class="text-gray-500 hover:text-gray-700"
+            >
+              <i class="ri-close-line text-xl"></i>
+            </button>
+          </div>
+
+          <div id="job-details-content">
+            <!-- Content will be dynamically inserted -->
+          </div>
+
+          <div class="mt-6">
+            <button
+              onclick="showApplicationForm()"
+              class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-blue-700 transition duration-300 font-medium"
+            >
+              Apply Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Service Inquiry Section -->
+    <section id="inquiry" class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">
+            Hospital Partners Portal
+          </h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">
+            For healthcare facilities interested in our imaging services. Submit
+            your inquiry and our team will contact you promptly.
+          </p>
+        </div>
+
+        <div
+          class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden"
+        >
+          <div class="grid grid-cols-1 md:grid-cols-2">
+            <div class="p-8">
+              <h3 class="text-xl font-semibold text-gray-800 mb-6">
+                Service Inquiry Form
+              </h3>
+              <form id="inquiry-form">
+                <div class="mb-4">
+                  <label
+                    for="facility-name"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Hospital/Facility Name</label
+                  >
+                  <input
+                    type="text"
+                    id="facility-name"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                    required
+                  />
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    for="contact-person"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Contact Person</label
+                  >
+                  <input
+                    type="text"
+                    id="contact-person"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                    required
+                  />
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    for="position"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Position</label
+                  >
+                  <input
+                    type="text"
+                    id="position"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                    required
+                  />
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    for="contact-email"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Email Address</label
+                  >
+                  <input
+                    type="email"
+                    id="contact-email"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                    required
+                  />
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    for="contact-phone"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Phone Number</label
+                  >
+                  <input
+                    type="tel"
+                    id="contact-phone"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                    required
+                  />
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    for="service-type"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Service Type Needed</label
+                  >
+                  <select
+                    id="service-type"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary pr-8"
+                    required
+                  >
+                    <option value="">Select a service</option>
+                    <option value="mri">MRI Services</option>
+                    <option value="ct">CT Scan Services</option>
+                    <option value="ultrasound">Ultrasound Services</option>
+                    <option value="xray">X-Ray Services</option>
+                    <option value="mammography">Mammography Services</option>
+                    <option value="multiple">Multiple Services</option>
+                  </select>
+                </div>
+
+                <div class="mb-6">
+                  <label
+                    for="message"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Additional Information</label
+                  >
+                  <textarea
+                    id="message"
+                    rows="4"
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary"
+                    required
+                  ></textarea>
+                </div>
+
+                <button
+                  type="submit"
+                  class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-blue-700 transition duration-300 font-medium w-full"
+                >
+                  Submit Inquiry
+                </button>
+              </form>
+            </div>
+
+            <div
+              class="bg-primary text-white p-8 flex flex-col justify-between"
+            >
+              <div>
+                <h3 class="text-xl font-semibold mb-6">Partner Benefits</h3>
+                <ul class="space-y-4">
+                  <li class="flex items-start">
+                    <i class="ri-check-line mr-2 mt-1"></i>
+                    <span>Priority scheduling for your patients</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="ri-check-line mr-2 mt-1"></i>
+                    <span>Dedicated liaison for seamless coordination</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="ri-check-line mr-2 mt-1"></i>
+                    <span>Secure electronic delivery of results</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="ri-check-line mr-2 mt-1"></i>
+                    <span>Customized reporting formats</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="ri-check-line mr-2 mt-1"></i>
+                    <span>Volume-based pricing options</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="mt-8">
+                <h4 class="font-medium mb-2">Direct Contact</h4>
+                <p class="flex items-center mb-2">
+                  <i class="ri-phone-line mr-2"></i>
+                  <span>(800) 555-9876</span>
+                </p>
+                <p class="flex items-center">
+                  <i class="ri-mail-line mr-2"></i>
+                  <span>partners@advancedimaging.com</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div>
+            <h1 class="text-3xl font-['Pacifico'] text-white mb-4">logo</h1>
+            <p class="text-gray-300 mb-4">
+              Advanced diagnostic imaging services with state-of-the-art
+              technology and expert radiologists.
+            </p>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-300 hover:text-white">
+                <i class="ri-facebook-fill text-xl"></i>
+              </a>
+              <a href="#" class="text-gray-300 hover:text-white">
+                <i class="ri-twitter-fill text-xl"></i>
+              </a>
+              <a href="#" class="text-gray-300 hover:text-white">
+                <i class="ri-linkedin-fill text-xl"></i>
+              </a>
+              <a href="#" class="text-gray-300 hover:text-white">
+                <i class="ri-instagram-fill text-xl"></i>
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="text-gray-300 hover:text-white">Home</a>
+              </li>
+              <li>
+                <a href="#services" class="text-gray-300 hover:text-white"
+                  >Services</a
+                >
+              </li>
+              <li>
+                <a href="#booking" class="text-gray-300 hover:text-white"
+                  >Book Appointment</a
+                >
+              </li>
+              <li>
+                <a href="#careers" class="text-gray-300 hover:text-white"
+                  >Careers</a
+                >
+              </li>
+              <li>
+                <a href="#inquiry" class="text-gray-300 hover:text-white"
+                  >Service Inquiry</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+            <ul class="space-y-2">
+              <li class="flex items-start">
+                <i class="ri-map-pin-line mr-2 mt-1"></i>
+                <span>123 Medical Center Drive<br />Boston, MA 02115</span>
+              </li>
+              <li class="flex items-center">
+                <i class="ri-phone-line mr-2"></i>
+                <span>(800) 555-1234</span>
+              </li>
+              <li class="flex items-center">
+                <i class="ri-mail-line mr-2"></i>
+                <span>info@advancedimaging.com</span>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Hours of Operation</h3>
+            <ul class="space-y-2">
+              <li class="flex justify-between">
+                <span>Monday - Friday</span>
+                <span>7:00 AM - 7:00 PM</span>
+              </li>
+              <li class="flex justify-between">
+                <span>Saturday</span>
+                <span>8:00 AM - 3:00 PM</span>
+              </li>
+              <li class="flex justify-between">
+                <span>Sunday</span>
+                <span>Closed</span>
+              </li>
+            </ul>
+            <div class="mt-4">
+              <p class="text-red-300 font-medium">
+                Emergency Services Available 24/7
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center"
+        >
+          <div class="mb-4 md:mb-0">
+            <p class="text-gray-400">
+              &copy; 2025 Advanced Imaging Center. All rights reserved.
+            </p>
+          </div>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white text-sm"
+              >Privacy Policy</a
+            >
+            <a href="#" class="text-gray-400 hover:text-white text-sm"
+              >Terms of Service</a
+            >
+            <a href="#" class="text-gray-400 hover:text-white text-sm"
+              >Accessibility</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script id="tab-functionality">
+      document.addEventListener("DOMContentLoaded", function () {
+        const tabButtons = document.querySelectorAll(".tab-button");
+        const tabContents = document.querySelectorAll(".tab-content");
+
+        tabButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            // Remove active class from all buttons and contents
+            tabButtons.forEach((btn) => {
+              btn.classList.remove("text-primary", "border-primary");
+              btn.classList.add("text-gray-500");
+            });
+            tabContents.forEach((content) => {
+              content.classList.remove("active");
+            });
+
+            // Add active class to clicked button and corresponding content
+            button.classList.add("text-primary", "border-primary");
+            button.classList.remove("text-gray-500");
+
+            const tabId = button.getAttribute("data-tab");
+            document.getElementById(tabId).classList.add("active");
+          });
+        });
+      });
+    </script>
+
+    <script id="careers-functionality">
+      document.addEventListener("DOMContentLoaded", function () {
+        // Job details content
+        window.jobDetails = {
+          radiologist: {
+            title: "Diagnostic Radiologist",
+            description:
+              '<p class="text-gray-600 mb-4">We are seeking a board-certified diagnostic radiologist to join our growing practice. The ideal candidate will have expertise in MRI and CT interpretation with a minimum of 3 years of experience in a clinical setting.</p>',
+            responsibilities: [
+              "Interpret a variety of diagnostic imaging studies including MRI, CT, X-ray, and ultrasound",
+              "Collaborate with referring physicians to provide optimal patient care",
+              "Participate in interdisciplinary conferences and tumor boards",
+              "Maintain accurate and timely reporting of diagnostic findings",
+              "Stay current with advances in diagnostic imaging techniques and technologies",
+            ],
+            requirements: [
+              "MD or DO degree from an accredited medical school",
+              "Board certification in Diagnostic Radiology",
+              "Current state medical license or eligibility",
+              "Minimum 3 years of post-fellowship experience",
+              "Fellowship training in neuroradiology, body imaging, or musculoskeletal imaging preferred",
+              "Excellent communication and interpersonal skills",
+            ],
+            benefits: [
+              "Competitive salary commensurate with experience",
+              "Comprehensive benefits package including health, dental, and vision insurance",
+              "Retirement plan with employer matching",
+              "Paid time off and CME allowance",
+              "Malpractice insurance coverage",
+              "Relocation assistance available",
+            ],
+          },
+          "mri-tech": {
+            title: "MRI Technologist",
+            description:
+              '<p class="text-gray-600 mb-4">We are looking for an experienced MRI Technologist to join our team. The ideal candidate will have ARRT certification and experience with 3T MRI systems.</p>',
+            responsibilities: [
+              "Perform MRI examinations according to established protocols",
+              "Ensure patient safety and comfort during procedures",
+              "Maintain and operate MRI equipment",
+              "Prepare and position patients for examinations",
+              "Document patient history and explain procedures to patients",
+              "Maintain patient records and PACS system",
+            ],
+            requirements: [
+              "Associate's or Bachelor's degree in Radiologic Technology",
+              "ARRT certification in MRI",
+              "Current state license where applicable",
+              "Minimum 2 years of experience as an MRI Technologist",
+              "Experience with 3T MRI systems preferred",
+              "BLS certification",
+              "Excellent patient care and communication skills",
+            ],
+            benefits: [
+              "Competitive hourly rate based on experience",
+              "Health, dental, and vision insurance",
+              "401(k) retirement plan with company match",
+              "Paid time off and holiday pay",
+              "Continuing education assistance",
+              "Career advancement opportunities",
+            ],
+          },
+          "ultrasound-tech": {
+            title: "Ultrasound Technologist",
+            description:
+              '<p class="text-gray-600 mb-4">We are seeking a registered Ultrasound Technologist with experience in abdominal, vascular, and OB/GYN ultrasound. ARDMS certification required.</p>',
+            responsibilities: [
+              "Perform diagnostic ultrasound procedures according to established protocols",
+              "Obtain and record patient history and explain procedures",
+              "Prepare and position patients for examinations",
+              "Observe and care for patients during examinations",
+              "Process, review, and evaluate ultrasound images for technical quality",
+              "Maintain equipment and work area",
+            ],
+            requirements: [
+              "Associate's or Bachelor's degree in Diagnostic Medical Sonography",
+              "ARDMS certification",
+              "Current state license where applicable",
+              "Minimum 1 year of experience as an Ultrasound Technologist",
+              "Experience in abdominal, vascular, and OB/GYN ultrasound",
+              "BLS certification",
+              "Strong communication and interpersonal skills",
+            ],
+            benefits: [
+              "Competitive part-time hourly rate",
+              "Flexible scheduling options",
+              "Pro-rated benefits for part-time employees",
+              "Continuing education opportunities",
+              "Professional development support",
+              "Positive work environment",
+            ],
+          },
+        };
+
+        // Function to show job details
+        window.showJobDetails = function (jobId) {
+          const job = window.jobDetails[jobId];
+          const detailsContainer = document.getElementById("job-details");
+          const titleElement = document.getElementById("job-details-title");
+          const contentElement = document.getElementById("job-details-content");
+
+          titleElement.textContent = job.title;
+
+          let content = job.description;
+
+          // Responsibilities
+          content +=
+            '<h4 class="font-semibold text-gray-800 mt-4 mb-2">Responsibilities:</h4>';
+          content += '<ul class="list-disc pl-5 mb-4 text-gray-600 space-y-1">';
+          job.responsibilities.forEach((item) => {
+            content += `<li>${item}</li>`;
+          });
+          content += "</ul>";
+
+          // Requirements
+          content +=
+            '<h4 class="font-semibold text-gray-800 mt-4 mb-2">Requirements:</h4>';
+          content += '<ul class="list-disc pl-5 mb-4 text-gray-600 space-y-1">';
+          job.requirements.forEach((item) => {
+            content += `<li>${item}</li>`;
+          });
+          content += "</ul>";
+
+          // Benefits
+          content +=
+            '<h4 class="font-semibold text-gray-800 mt-4 mb-2">Benefits:</h4>';
+          content += '<ul class="list-disc pl-5 mb-4 text-gray-600 space-y-1">';
+          job.benefits.forEach((item) => {
+            content += `<li>${item}</li>`;
+          });
+          content += "</ul>";
+
+          contentElement.innerHTML = content;
+
+          // Store current job for application form
+          window.currentJob = jobId;
+
+          // Show the details container
+          detailsContainer.style.display = "block";
+
+          // Scroll to the details
+          detailsContainer.scrollIntoView({ behavior: "smooth" });
+        };
+
+        // Function to hide job details
+        window.hideJobDetails = function () {
+          document.getElementById("job-details").style.display = "none";
+        };
+
+        // Function to show application form
+        window.showApplicationForm = function () {
+          const job = window.jobDetails[window.currentJob];
+          document.getElementById("job-application-title").textContent =
+            `Apply for ${job.title}`;
+          document.getElementById("job-details").style.display = "none";
+          document.getElementById("application-form").style.display = "block";
+
+          // Scroll to the application form
+          document
+            .getElementById("application-form")
+            .scrollIntoView({ behavior: "smooth" });
+        };
+
+        // Function to hide application form
+        window.hideApplicationForm = function () {
+          document.getElementById("application-form").style.display = "none";
+        };
+
+        // Handle application form submission
+        document
+          .getElementById("career-application-form")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            alert(
+              "Thank you for your application! We will review your information and contact you soon.",
+            );
+            hideApplicationForm();
+          });
+      });
+    </script>
+
+    <script id="form-submissions">
+      document.addEventListener("DOMContentLoaded", function () {
+        // Appointment form submission
+        document
+          .getElementById("appointment-form")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            alert(
+              "Thank you for scheduling an appointment! We will confirm your booking within 24 hours.",
+            );
+            this.reset();
+          });
+
+        // Inquiry form submission
+        document
+          .getElementById("inquiry-form")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            alert(
+              "Thank you for your inquiry! Our team will contact you promptly to discuss your needs.",
+            );
+            this.reset();
+          });
+
+        // Set minimum date for appointment booking to today
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("preferred-date").setAttribute("min", today);
+      });
+    </script>
+  </body>
 </html>

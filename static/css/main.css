@@ -2,6 +2,17 @@
 @plugin "daisyui";
 
 /* Style Markdown elements */
+.editor-toolbar {
+    z-index: 1000 !important; /* Ensure the toolbar is above other elements */
+    background-color: #f8f9fa !important; /* Light background for better visibility */
+    border-radius: 0.375rem !important; /* Rounded corners */
+    position: static; /* Avoid overriding SimpleMDE's default positioning */
+}
+.editor-toolbar .fa, .editor-toolbar .svg-inline--fa {
+    pointer-events: auto !important; /* Ensure icons respond to clicks */
+    width: 1rem !important; /* Adjust icon size */
+    height: 1rem !important;
+}
 .markdown-content h1 {
     @apply text-3xl font-bold mb-4 text-gray-900;
 }
